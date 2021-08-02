@@ -40,10 +40,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/addProduct", "/updateProduct").hasRole("ADMIN").anyRequest()
-				.authenticated().and().formLogin().permitAll().and().logout().permitAll().and().exceptionHandling()
-				.accessDeniedPage("/403");
-
+//		http.authorizeRequests().antMatchers(HttpMethod.POST, "/products/*", "/products").hasRole("ADMIN")
+//				.antMatchers(HttpMethod.POST, "/products/quant/*").hasRole("USER").anyRequest().authenticated().and()
+//				.formLogin().permitAll().and().logout().permitAll().and().exceptionHandling().accessDeniedPage("/403");
+		http.authorizeRequests().anyRequest().authenticated().and().formLogin().permitAll().and().logout().permitAll()
+				.and().exceptionHandling().accessDeniedPage("/403");
 	}
+
+//	@Override
+//	public void configure(WebSecurity web) throws Exception {
+//		web.ignoring().antMatchers("/**");
+//	}
 
 }

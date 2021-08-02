@@ -32,8 +32,8 @@
 					<td><c:out value='${String.format("$%.2f", prod.getPrice())}'/></td>
 					<td><c:out value="${prod.getQuantity()}"/></td>
 					<td><c:out value='${String.format("$%.2f", prod.getPrice() * prod.getQuantity())}'/></td>
+					<td><a href="/updateProduct/${prod.getId()}">edit</a></td>
 					<sec:authorize access='hasRole("ADMIN")'>
-						<td><a href="/updateProduct/${prod.getId()}">edit</a></td>
 						<td><a href="/products/delete/${prod.getId()}">delete</a></td>
 					</sec:authorize>
 				</tr>
