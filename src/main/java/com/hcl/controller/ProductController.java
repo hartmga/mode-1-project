@@ -63,8 +63,6 @@ public class ProductController {
 	@PostMapping("/products")
 	public String createProduct(ModelMap map, @Valid @ModelAttribute(name = "product") Product product,
 			BindingResult result) {
-		System.out.println(result);
-		System.out.println(product);
 		if (result.hasErrors()) {
 			return "newProduct";
 		}
@@ -75,7 +73,11 @@ public class ProductController {
 	@PostMapping("/products/quant/{id}") // using post instead of put for html form
 	public String updateQuantity(@PathVariable long id, @Valid @ModelAttribute Product product, BindingResult result)
 			throws ProductNotFoundException {
-		System.out.println(id);
+		if (result.hasErrors()) {
+			if (result.hasFieldErrors("quantity")) {
+				return "updateQuantity";
+			}
+		}
 		Product toUpdate = ps.getProductById(id);
 		toUpdate.setQuantity(product.getQuantity());
 		ps.updateProduct(toUpdate, id);

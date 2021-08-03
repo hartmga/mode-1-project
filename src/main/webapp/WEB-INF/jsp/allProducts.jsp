@@ -8,6 +8,7 @@
 <meta charset="ISO-8859-1">
 <title>All Products</title>
 <link href="/css/products.css" rel="stylesheet">
+
 </head>
 <body>
 
@@ -19,17 +20,14 @@
 	<div class="content">
 		<h3>All Products</h3>
 	
-		<table border=1>
+		<table border="1" cellpadding="10">
 			<tr>
 				<th>id</th>
 				<th>name</th>
 				<th>price</th>
 				<th>quantity</th>
 				<th>total</th>
-				<sec:authorize access='hasRole("ADMIN")'>
-					<th></th>
-					<th></th>
-				</sec:authorize>
+				<th>Actions</th>
 			</tr>
 			<c:forEach var="prod" items="${products}">
 				<tr>
@@ -47,10 +45,10 @@
 								<a href="/updateQuantity/${prod.getId()}">edit</a>
 							</c:otherwise>
 						</c:choose>
+						<sec:authorize access='hasRole("ADMIN")'>
+							<a href="/products/delete/${prod.getId()}">delete</a>
+						</sec:authorize>
 					</td>
-					<sec:authorize access='hasRole("ADMIN")'>
-						<td><a href="/products/delete/${prod.getId()}">delete</a></td>
-					</sec:authorize>
 				</tr>
 			</c:forEach>
 			<tr>
