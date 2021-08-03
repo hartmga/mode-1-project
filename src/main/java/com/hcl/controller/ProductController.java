@@ -1,6 +1,5 @@
 package com.hcl.controller;
 
-import java.security.Principal;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hcl.model.Product;
 import com.hcl.service.ProductService;
@@ -30,6 +28,21 @@ public class ProductController {
 	@Autowired
 	ProductService ps;
 
+	@GetMapping("/")
+	public String sendToProducts() {
+		return "redirect:/products";
+	}
+
+	@GetMapping("/products")
+	public String showAllProducts(Model model, Authentication auth) {
+		List<Product> allProducts = ps.getAllProducts();
+		model.addAttribute("products", allProducts);
+		double total = allProducts.stream().map(p -> p.getPrice() * p.getQuantity()).reduce(0d, (t1, t2) -> t1 + t2);
+		model.addAttribute("total", total);
+		model.addAttribute("user", auth.getPrincipal());
+		return "allProducts";
+	}
+
 	@GetMapping("/addProduct")
 	public String addProductForm(ModelMap map) {
 		map.addAttribute("product", new Product());
@@ -37,27 +50,17 @@ public class ProductController {
 	}
 
 	@GetMapping("/updateProduct/{id}")
-	public String updateProductForm(@PathVariable long id, ModelMap model, Authentication auth) {
+	public String updateProductForm(@PathVariable long id, ModelMap model) throws ProductNotFoundException {
 		model.addAttribute("product", ps.getProductById(id));
 		model.addAttribute("id", id);
 		return "updateProduct";
 	}
 
 	@GetMapping("/updateQuantity/{id}")
-	public String updateQuantityForm(@PathVariable long id, ModelMap model, Authentication auth) {
+	public String updateQuantityForm(@PathVariable long id, ModelMap model) throws ProductNotFoundException {
 		model.addAttribute("product", ps.getProductById(id));
 		model.addAttribute("id", id);
 		return "updateQuantity";
-	}
-
-	@GetMapping("/products")
-	public String showAllProducts(Model model, Principal principal) {
-		List<Product> allProducts = ps.getAllProducts();
-		model.addAttribute("products", allProducts);
-		double total = allProducts.stream().map(p -> p.getPrice() * p.getQuantity()).reduce(0d, (t1, t2) -> t1 + t2);
-		model.addAttribute("total", total);
-		model.addAttribute("user", principal);
-		return "allProducts";
 	}
 
 	@PostMapping("/products")
@@ -101,7 +104,6 @@ public class ProductController {
 	}
 
 	@GetMapping("/403")
-	@ResponseBody
 	public String unauthorized() {
 		return "unauthorized";
 	}

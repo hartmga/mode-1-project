@@ -8,62 +8,83 @@
 <meta charset="ISO-8859-1">
 <title>All Products</title>
 <link href="/css/products.css" rel="stylesheet">
-
 </head>
 <body>
+	<div align="center">
 
-	<c:set var="isAdmin" scope="request" value="false"/>
-	<sec:authorize access='hasRole("ADMIN")'>
-		<c:set var="isAdmin" scope="request" value="true"/>
-	</sec:authorize>
-
-	<div class="content">
+		<h3> Currently logged in as "<%= ((com.hcl.model.MyUserDetails) request.getAttribute("user")).getUsername() %>" </h3>
+		<form method="GET" action="/logout">
+			<input type=submit value="logout"/>
+		</form>
+		
+		<hr>
+	
+		<c:set var="isAdmin" scope="request" value="false"/>
+		<sec:authorize access='hasRole("ADMIN")'>
+			<c:set var="isAdmin" scope="request" value="true"/>
+		</sec:authorize>
+		
 		<h3>All Products</h3>
 	
 		<table border="1" cellpadding="10">
-			<tr>
-				<th>id</th>
-				<th>name</th>
-				<th>price</th>
-				<th>quantity</th>
-				<th>total</th>
-				<th>Actions</th>
-			</tr>
+			<thead>
+				<tr>
+					<th>id</th>
+					<th>name</th>
+					<th>brand</th>
+					<th>made in</th>
+					<th>price</th>
+					<th>quantity</th>
+					<th>total</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
 			<c:forEach var="prod" items="${products}">
 				<tr>
 					<td><c:out value="${prod.getId()}"/></td>
 					<td><c:out value="${prod.getName()}"/></td>
+					<td><c:out value="${prod.getBrand()}"/></td>
+					<td><c:out value="${prod.getMadein()}"/></td>
 					<td><c:out value='${String.format("$%.2f", prod.getPrice())}'/></td>
 					<td><c:out value="${prod.getQuantity()}"/></td>
 					<td><c:out value='${String.format("$%.2f", prod.getPrice() * prod.getQuantity())}'/></td>
 					<td>
 						<c:choose>
 							<c:when test="${isAdmin}">
-								<a href="/updateProduct/${prod.getId()}">edit</a>
+								<c:set var="editFormPath" value="/updateProduct/${prod.getId()}" scope="request"/>
 							</c:when>
 							<c:otherwise>
-								<a href="/updateQuantity/${prod.getId()}">edit</a>
+								<c:set var="editFormPath" value="/updateQuantity/${prod.getId()}" scope="request"/>
 							</c:otherwise>
 						</c:choose>
-						<sec:authorize access='hasRole("ADMIN")'>
-							<a href="/products/delete/${prod.getId()}">delete</a>
-						</sec:authorize>
+						<a href="${editFormPath}">edit</a>
+						<c:choose>
+							<c:when test="${isAdmin}">
+								<a href="/products/delete/${prod.getId()}">delete</a>
+							</c:when>
+						</c:choose>
 					</td>
 				</tr>
 			</c:forEach>
 			<tr>
 				<td>
-					<sec:authorize access='hasRole("ADMIN")'>
-						<a href="/addProduct">+add new</a>
-					</sec:authorize>
+					<c:choose>
+						<c:when test="${isAdmin}">
+							<form method="GET" action="/addProduct">
+								<input type="submit" value="+new item"/>
+							</form>
+						</c:when>
+					</c:choose>
 				</td>
 				<td></td>
 				<td></td>
 				<td></td>
+				<td></td>
+				<td></td>
 				<td>${String.format("$%.2f", total)}</td>
+				<td></td>
 			</tr>
 		</table>
 	</div>
-
 </body>
 </html>

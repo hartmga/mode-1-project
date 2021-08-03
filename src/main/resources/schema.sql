@@ -20,8 +20,10 @@ CREATE TABLE authorities(
 CREATE TABLE products(
 	product_id integer auto_increment,
     name varchar(45) NOT NULL,
-    price double CHECK (price>=0),
-    quantity integer CHECK (quantity>=0),
+    brand varchar(45),
+    madein varchar(45),
+    price double CHECK (price>=0) NOT NULL,
+    quantity integer CHECK (quantity>=0) DEFAULT 0,
     primary key(product_id)
 );
 

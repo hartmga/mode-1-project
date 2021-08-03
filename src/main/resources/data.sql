@@ -13,12 +13,12 @@ INSERT INTO authorities values ('user', 'ROLE_USER');
 
 -- Add initial products
 
-INSERT INTO products (name, price, quantity) 
-VALUES ('pencil', 0.99, 20);
+INSERT INTO products (name, brand, madein, price, quantity) 
+VALUES ('pencil', 'Ticonderoga', 'somewhere', 0.99, 20);
 
-INSERT INTO products (name, price, quantity) 
-VALUES ('eraser', 0.25, 4);
+INSERT INTO products (name, brand, madein, price, quantity) 
+VALUES ('eraser', 'Pentel', 'somewhere else', 0.25, 4);
 
-INSERT INTO products (name, price, quantity) 
-VALUES ('pen', 1.25, 12);
+INSERT INTO products (name, brand, madein, price, quantity) 
+VALUES ('pen', 'Pilot', 'a place', 1.25, 12);
 

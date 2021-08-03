@@ -9,6 +9,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
 
+import com.sun.istack.NotNull;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -26,6 +28,11 @@ public class Product {
 	@NotBlank
 	private String name;
 
+	private String brand;
+
+	private String madein;
+
+	@NotNull
 	@PositiveOrZero
 	private double price;
 

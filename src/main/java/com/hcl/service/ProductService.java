@@ -8,7 +8,7 @@ import exception.ProductNotFoundException;
 
 public interface ProductService {
 
-	public Product getProductById(long id);
+	public Product getProductById(long id) throws ProductNotFoundException;
 
 	public List<Product> getAllProducts();
 
