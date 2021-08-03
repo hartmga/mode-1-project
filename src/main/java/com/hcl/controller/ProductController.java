@@ -16,10 +16,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.hcl.exception.ProductNotFoundException;
 import com.hcl.model.Product;
 import com.hcl.service.ProductService;
-
-import exception.ProductNotFoundException;
 
 @Controller
 @RequestMapping("")

@@ -2,9 +2,8 @@ package com.hcl.service;
 
 import java.util.List;
 
+import com.hcl.exception.ProductNotFoundException;
 import com.hcl.model.Product;
-
-import exception.ProductNotFoundException;
 
 public interface ProductService {
 

@@ -1,4 +1,4 @@
-package exception;
+package com.hcl.exception;
 
 public class ProductNotFoundException extends Exception {
 	public ProductNotFoundException(String s) {
