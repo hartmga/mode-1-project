@@ -1,9 +1,8 @@
-package com.hcl.mode_1_project.controller;
+package com.hcl.controller;
 
+import java.security.Principal;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,15 +15,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.hcl.mode_1_project.model.Product;
-import com.hcl.mode_1_project.service.ProductService;
+import com.hcl.model.Product;
+import com.hcl.service.ProductService;
 
 import exception.ProductNotFoundException;
 
 @Controller
+@RequestMapping("")
 public class ProductController {
 
 	@Autowired
@@ -40,45 +40,44 @@ public class ProductController {
 	public String updateProductForm(@PathVariable long id, ModelMap model, Authentication auth) {
 		model.addAttribute("product", ps.getProductById(id));
 		model.addAttribute("id", id);
+		return "updateProduct";
+	}
 
-		// admin users go to the "updateProduct" form page
-		// unauthorized users need to be sent to the "updateQuantity" form or they will
-		// not be able to submit their form.
-		if (auth == null || !auth.isAuthenticated()) {
-			return "redirect:/login";
-		}
-		boolean isAdmin = auth.getAuthorities().stream().map(a -> a.getAuthority()).collect(Collectors.toSet())
-				.contains("ROLE_ADMIN");
-		return isAdmin ? "updateProduct" : "updateQuantity";
+	@GetMapping("/updateQuantity/{id}")
+	public String updateQuantityForm(@PathVariable long id, ModelMap model, Authentication auth) {
+		model.addAttribute("product", ps.getProductById(id));
+		model.addAttribute("id", id);
+		return "updateQuantity";
 	}
 
 	@GetMapping("/products")
-	public String showAllProducts(Model model) {
+	public String showAllProducts(Model model, Principal principal) {
 		List<Product> allProducts = ps.getAllProducts();
 		model.addAttribute("products", allProducts);
 		double total = allProducts.stream().map(p -> p.getPrice() * p.getQuantity()).reduce(0d, (t1, t2) -> t1 + t2);
 		model.addAttribute("total", total);
+		model.addAttribute("user", principal);
 		return "allProducts";
 	}
 
 	@PostMapping("/products")
-	public String createProduct(@Valid @ModelAttribute Product newProd, BindingResult result, ModelMap map) {
+	public String createProduct(ModelMap map, @Valid @ModelAttribute(name = "product") Product product,
+			BindingResult result) {
 		System.out.println(result);
-		System.out.println(newProd);
+		System.out.println(product);
 		if (result.hasErrors()) {
-			System.out.println("error in update");
-			map.addAttribute("error", result.toString());
-			return "redirect:/400";
+			return "newProduct";
 		}
-		ps.addProduct(newProd);
+		ps.addProduct(product);
 		return "redirect:/products";
 	}
 
 	@PostMapping("/products/quant/{id}") // using post instead of put for html form
-	public String updateQuantity(@PathVariable long id, @RequestParam int quant) throws ProductNotFoundException {
+	public String updateQuantity(@PathVariable long id, @Valid @ModelAttribute Product product, BindingResult result)
+			throws ProductNotFoundException {
 		System.out.println(id);
 		Product toUpdate = ps.getProductById(id);
-		toUpdate.setQuantity(quant);
+		toUpdate.setQuantity(product.getQuantity());
 		ps.updateProduct(toUpdate, id);
 		return "redirect:/products";
 	}
@@ -87,9 +86,7 @@ public class ProductController {
 	public String updateProduct(@PathVariable long id, @Valid @ModelAttribute Product product, BindingResult result,
 			ModelMap map) throws ProductNotFoundException {
 		if (result.hasErrors()) {
-			System.out.println("error in update");
-			map.addAttribute("error", result.toString());
-			return "redirect:/400";
+			return "updateProduct";
 		}
 		ps.updateProduct(product, id);
 		return "redirect:/products";
@@ -107,9 +104,4 @@ public class ProductController {
 		return "unauthorized";
 	}
 
-	@GetMapping("/400")
-	@ResponseBody
-	public String badRequest(HttpServletRequest req) {
-		return "Request Error: " + req.getAttribute("error");
-	}
 }

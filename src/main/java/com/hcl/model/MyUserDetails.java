@@ -1,4 +1,4 @@
-package com.hcl.mode_1_project.model;
+package com.hcl.model;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -17,8 +17,6 @@ public class MyUserDetails implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-//		SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getRole());
-//		return Arrays.asList(authority);
 		return user.getAuthorities().stream().map(a -> new SimpleGrantedAuthority(a.getRole()))
 				.collect(Collectors.toList());
 	}

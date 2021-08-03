@@ -1,4 +1,4 @@
-package com.hcl.mode_1_project;
+package com.hcl;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

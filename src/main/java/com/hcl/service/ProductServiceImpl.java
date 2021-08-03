@@ -1,4 +1,4 @@
-package com.hcl.mode_1_project.service;
+package com.hcl.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,8 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.hcl.mode_1_project.model.Product;
-import com.hcl.mode_1_project.repository.ProductRepository;
+import com.hcl.model.Product;
+import com.hcl.repository.ProductRepository;
 
 import exception.ProductNotFoundException;
 
@@ -37,20 +37,16 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public Product updateProduct(Product prod, long id) throws ProductNotFoundException {
-		if (pr.findById(id).isEmpty()) {
-			throw new ProductNotFoundException(
-					String.format("Cannot update product with id %d. Product does not exist.", id));
-		}
+		pr.findById(id).orElseThrow(() -> new ProductNotFoundException(
+				String.format("Cannot update product with id %d. Product does not exist.", id)));
 		prod.setId(id);
 		return pr.save(prod);
 	}
 
 	@Override
 	public void deleteProduct(long id) throws ProductNotFoundException {
-		if (pr.findById(id).isEmpty()) {
-			throw new ProductNotFoundException(
-					String.format("Cannot delete product with id %d. Product does not exist.", id));
-		}
+		pr.findById(id).orElseThrow(() -> new ProductNotFoundException(
+				String.format("Cannot update product with id %d. Product does not exist.", id)));
 		pr.deleteById(id);
 	}
 

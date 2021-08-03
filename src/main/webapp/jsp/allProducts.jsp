@@ -7,9 +7,15 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>All Products</title>
-<link href="/products.css" rel="stylesheet">
+<link href="/css/products.css" rel="stylesheet">
 </head>
 <body>
+
+	<c:set var="isAdmin" scope="request" value="false"/>
+	<sec:authorize access='hasRole("ADMIN")'>
+		<c:set var="isAdmin" scope="request" value="true"/>
+	</sec:authorize>
+
 	<div class="content">
 		<h3>All Products</h3>
 	
@@ -32,7 +38,16 @@
 					<td><c:out value='${String.format("$%.2f", prod.getPrice())}'/></td>
 					<td><c:out value="${prod.getQuantity()}"/></td>
 					<td><c:out value='${String.format("$%.2f", prod.getPrice() * prod.getQuantity())}'/></td>
-					<td><a href="/updateProduct/${prod.getId()}">edit</a></td>
+					<td>
+						<c:choose>
+							<c:when test="${isAdmin}">
+								<a href="/updateProduct/${prod.getId()}">edit</a>
+							</c:when>
+							<c:otherwise>
+								<a href="/updateQuantity/${prod.getId()}">edit</a>
+							</c:otherwise>
+						</c:choose>
+					</td>
 					<sec:authorize access='hasRole("ADMIN")'>
 						<td><a href="/products/delete/${prod.getId()}">delete</a></td>
 					</sec:authorize>

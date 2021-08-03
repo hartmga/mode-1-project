@@ -1,8 +1,8 @@
-package com.hcl.mode_1_project.service;
+package com.hcl.service;
 
 import java.util.List;
 
-import com.hcl.mode_1_project.model.Product;
+import com.hcl.model.Product;
 
 import exception.ProductNotFoundException;
 

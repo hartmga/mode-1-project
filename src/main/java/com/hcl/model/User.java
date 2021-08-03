@@ -1,4 +1,4 @@
-package com.hcl.mode_1_project.model;
+package com.hcl.model;
 
 import java.util.List;
 
