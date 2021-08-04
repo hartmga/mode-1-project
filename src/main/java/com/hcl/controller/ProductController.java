@@ -14,18 +14,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.hcl.exception.ProductNotFoundException;
 import com.hcl.model.Product;
 import com.hcl.service.ProductService;
 
 @Controller
-@RequestMapping("")
 public class ProductController {
 
 	@Autowired
-	ProductService ps;
+	private ProductService ps;
 
 	@GetMapping("/")
 	public String sendToProducts() {
@@ -36,7 +34,7 @@ public class ProductController {
 	public String showAllProducts(Model model, Authentication auth) {
 		List<Product> allProducts = ps.getAllProducts();
 		model.addAttribute("products", allProducts);
-		double total = allProducts.stream().map(p -> p.getPrice() * p.getQuantity()).reduce(0d, (t1, t2) -> t1 + t2);
+		double total = ps.getProductTotal(allProducts);
 		model.addAttribute("total", total);
 		model.addAttribute("user", auth.getPrincipal());
 		return "allProducts";

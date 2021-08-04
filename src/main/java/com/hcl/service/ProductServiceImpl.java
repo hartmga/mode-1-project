@@ -50,4 +50,9 @@ public class ProductServiceImpl implements ProductService {
 		pr.deleteById(id);
 	}
 
+	@Override
+	public double getProductTotal(List<Product> products) {
+		return products.stream().map(p -> p.getPrice() * p.getQuantity()).reduce(0d, (t1, t2) -> t1 + t2);
+	}
+
 }
