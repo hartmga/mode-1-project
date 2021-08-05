@@ -1,8 +1,10 @@
 package com.hcl.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -12,13 +14,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "authorities")
-@IdClass(AuthorityId.class)
-public class Authorities {
+public class Authority {
 
 	@Id
-	private String username;
+	@Column(name = "authority_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 
-	@Id
 	private String role;
-
+	
 }

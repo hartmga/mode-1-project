@@ -81,7 +81,7 @@
 				<td></td>
 				<td></td>
 				<td></td>
-				<td>${String.format("$%.2f", total)}</td>
+				<td><strong>${String.format("$%.2f", total)}</strong></td>
 				<td></td>
 			</tr>
 		</table>

@@ -25,11 +25,6 @@ public class ProductController {
 	@Autowired
 	private ProductService ps;
 
-	@GetMapping("/")
-	public String sendToProducts() {
-		return "redirect:/products";
-	}
-
 	@GetMapping("/products")
 	public String showAllProducts(Model model, Authentication auth) {
 		List<Product> allProducts = ps.getAllProducts();

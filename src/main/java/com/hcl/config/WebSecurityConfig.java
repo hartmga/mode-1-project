@@ -1,7 +1,6 @@
 package com.hcl.config;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -43,9 +42,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 			.antMatchers(HttpMethod.POST, "/products/*", "/products").hasRole("ADMIN")
 			.antMatchers(HttpMethod.GET, "/addProduct", "/updateProduct/*", "/products/delete/*").hasRole("ADMIN")
+			.antMatchers("/", "/signup", "/register", "/css/**").permitAll()
 			.anyRequest().authenticated()
-			.and().formLogin().permitAll()
-			.and().logout().permitAll()
+			.and().formLogin().loginPage("/login").defaultSuccessUrl("/products").permitAll()
+			.and().logout().logoutUrl("/logout").permitAll()
 			.and().exceptionHandling().accessDeniedPage("/403");
 	}
 

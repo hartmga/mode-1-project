@@ -10,6 +10,9 @@ import com.hcl.exception.ProductNotFoundException;
 import com.hcl.model.Product;
 import com.hcl.repository.ProductRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -18,12 +21,14 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public Product getProductById(long id) throws ProductNotFoundException {
+		log.info("getting product with id"+id);
 		return pr.findById(id).orElseThrow(() -> new ProductNotFoundException(
 				String.format("Cannot update product with id %d. Product does not exist.", id)));
 	}
 
 	@Override
 	public List<Product> getAllProducts() {
+		log.info("getting all products");
 		Iterable<Product> allProds = pr.findAll();
 		List<Product> productList = new ArrayList<>();
 		allProds.forEach(productList::add);
@@ -32,7 +37,9 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public Product addProduct(Product prod) {
-		return pr.save(prod);
+		Product newProd = pr.save(prod);
+		log.info("created product "+newProd);
+		return newProd;
 	}
 
 	@Override
@@ -40,6 +47,7 @@ public class ProductServiceImpl implements ProductService {
 		pr.findById(id).orElseThrow(() -> new ProductNotFoundException(
 				String.format("Cannot update product with id %d. Product does not exist.", id)));
 		prod.setId(id);
+		log.info("updating product: "+prod);
 		return pr.save(prod);
 	}
 
@@ -47,6 +55,7 @@ public class ProductServiceImpl implements ProductService {
 	public void deleteProduct(long id) throws ProductNotFoundException {
 		pr.findById(id).orElseThrow(() -> new ProductNotFoundException(
 				String.format("Cannot update product with id %d. Product does not exist.", id)));
+		log.info("deleting product with id "+id);
 		pr.deleteById(id);
 	}
 
