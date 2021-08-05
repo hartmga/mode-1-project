@@ -6,6 +6,6 @@ import com.hcl.model.User;
 
 public interface UserService {
 
-	public User registerUser(String username, String password) throws AuthorityDoesNotExistException, UsernameUnavailableException;
+	User registerUser(String username, String password) throws AuthorityDoesNotExistException, UsernameUnavailableException;
 		
 }

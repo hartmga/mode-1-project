@@ -14,6 +14,9 @@ import com.hcl.model.User;
 import com.hcl.repository.AuthorityRepository;
 import com.hcl.repository.UserRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 	
@@ -25,7 +28,6 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User registerUser(String username, String password) throws AuthorityDoesNotExistException, UsernameUnavailableException {
-		System.out.println(username+password);
 		User newUser = new User();
 		newUser.setUsername(username);
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -43,7 +45,10 @@ public class UserServiceImpl implements UserService {
 			ar.save(a);
 		}
 		newUser.setEnabled(true);
-		return ur.save(newUser);
+		User saved =  ur.save(newUser);
+		log.info("saved new user: "+saved);
+		return saved;
 	}
+	
 	
 }

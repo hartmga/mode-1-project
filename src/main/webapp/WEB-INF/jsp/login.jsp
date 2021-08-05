@@ -11,6 +11,8 @@
 <body>
 	<div align="center">
 		<h1>Log In</h1>
+		<div class="success">${msg}</div>
+		<div class="error">${errorMsg}</div>
 		<form method="POST" action="/login">
 			<label for="uname"><strong>Username: </strong></label>
 			<input type="text" id="uname" name="username"/>

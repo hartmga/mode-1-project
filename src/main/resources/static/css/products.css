@@ -6,3 +6,8 @@ tr:nth-of-type(2n-1) {
 thead tr th{
 	background-color: white;
 }
+
+
+.link {
+	display: inline-block;
+}

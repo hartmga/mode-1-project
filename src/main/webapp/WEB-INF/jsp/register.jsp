@@ -11,6 +11,7 @@
 <body>
 	<div align="center">
 		<h1>Create New User</h1>
+		<div class="error">${error}</div>
 		<form method="POST" action="/register">
 			<label for="uname"><strong>Username: </strong></label>
 			<input type="text" id="uname" name="username"/>
